@@ -33,4 +33,4 @@ for match in patent_id_matches[:]:
 
 
 with open("../../../data/patent_ids/sandia.csv", "w") as f:
-  f.write(",\n".join(patent_ids))
+  f.write(",\n".join(patent_ids) + ",")
