@@ -1,19 +1,38 @@
+import os
 
 
-with open("../../../data/patent_ids/sandia.csv", "r") as f:
+input_patent_ids_file_name = "../../../data/patent_ids/sandia.csv"
+input_lens_patent_ids_file_name = "./lens-export.csv"
+
+if not os.path.isfile(input_patent_ids_file_name):
+  print("File not found: {}\n".format(input_patent_ids_file_name))
+  print("Please follow instructions in parser.py file first to generate the {} file".format(input_patent_ids_file_name))
+  sys.exit(1)
+
+if not os.path.isfile(input_lens_patent_ids_file_name):
+  print("File not found: {}\n".format(input_lens_patent_ids_file_name))
+  print("Please follow these instructions:")
+  print("1. Go to lens.org and export all of the Sandia related patents using the following search: https://www.lens.org/lens/search?q=applicant:Sandia%%20OR%%20owner:Sandia&l=en&st=true&preview=true")
+  print("2. Place the export file at {}".format(input_lens_patent_ids_file_name))
+  sys.exit(1)
+
+
+with open(input_patent_ids_file_name, "r") as f:
   sandia_patent_ids_text = f.read()
 
-# Requires an export of all "owner:Sandia" or "applicant:Sandia" patents
-# https://www.lens.org/lens/search?q=applicant:Sandia%20OR%20owner:Sandia&l=en&st=true&preview=true
-with open("./lens-export.csv", "r") as f:
+with open(input_lens_patent_ids_file_name, "r") as f:
   lens_export_text = f.read().strip()
 
-# Create manual map by:
+#
+# This manual map was created by:
+#
 # 1. Running script with empty manual map to get non matching ids
 # 2. Going to https://ip.sandia.gov/category.do/categoryID=31 and searching for the id.  Needs to be comma seperated.  E.g. if 10330657 is not matching then search for: 10,330,657
 # 3. Copy the title and use in search on lens.org page: https://www.lens.org/lens/search?l=en&st=true&preview=true&view=boolean&q=(applicant:Sandia%20%20OR%20owner:Sandia)%20AND%20title:(Estimation%20of%20conductivity%20for%20nanoporous%20materials)
 # 4. Copy and paste the other patent id (recorded for reference) and the given lens_id
+#
 # n.b. if you don't find it then search by title in case the owner & applicant is not recorded as Sandia in lens.org database e.g.: https://www.lens.org/lens/search?l=en&st=true&preview=true&view=boolean&q=title:(THIOPHOSPHORYLATING%20A%20SATURATED%20HYDROCARBON%20GROUP)
+#
 manual_map = {
   "10330657": { "other_id": "WO 2016/094153 A2", "lens_id": "112-021-245-517-125" },
   "8439534":  { "other_id": "US 8439534 B1", "lens_id": "117-762-823-930-633" },
