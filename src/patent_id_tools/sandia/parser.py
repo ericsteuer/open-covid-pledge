@@ -31,6 +31,19 @@ for match in patent_id_matches[:]:
   patent_id = match.replace(",", "")
   patent_ids.append(patent_id)
 
+# Find duplicates
+deduped_patent_ids = []
+duplicates = []
 
+for patent_id in patent_ids:
+  if patent_id not in deduped_patent_ids:
+    deduped_patent_ids.append(patent_id)
+  else:
+    duplicates.append(patent_id)
+
+if duplicates:
+  print("Found {} duplicates: {}".format(len(duplicates), duplicates))
+
+# Write to file
 with open("../../../data/patent_ids/sandia.csv", "w") as f:
-  f.write(",\n".join(patent_ids) + ",")
+  f.write(",\n".join(deduped_patent_ids) + ",")
