@@ -44,7 +44,8 @@ for patent_id in sandia_patent_ids:
   else:
     not_matched.append(patent_id)
 
-
+# Note when this are uploaded to lens they must be uploaded without the newlines, the final trailing comma, and no whitespace between the ids
+# e.g.: 148-042-950-998-250,087-269-695-607-325,085-796-496-379-851
 matched_ids_str = ",\n".join(matched) + ","
 
 with open("../../../data/lens_org_patent_ids/sandia.csv", "w") as f:
@@ -53,5 +54,20 @@ with open("../../../data/lens_org_patent_ids/sandia.csv", "w") as f:
 print("Matched:")
 print(matched_ids_str)
 print("---")
+
+count_per_lens_id = {}
+duplicate_lens_ids = set()
+for patent_id in matched:
+  if patent_id not in count_per_lens_id:
+    count_per_lens_id[patent_id] = 0
+  count_per_lens_id[patent_id] += 1
+  if count_per_lens_id[patent_id] > 1:
+    duplicate_lens_ids.add(patent_id)
+
+if duplicate_lens_ids:
+  print("Warning: {} duplicates: {}".format(len(duplicate_lens_ids), duplicate_lens_ids))
+
+print("---")
+
 print("Not matched {}:".format(len(not_matched)))
 print(",\n".join(not_matched))
