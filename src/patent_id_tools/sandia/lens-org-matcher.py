@@ -52,7 +52,10 @@ for data in lens_data:
   lens_id_by_patent_id[only_number] = data
 
 
-sandia_patent_ids = [i[:-1] for i in sandia_patent_ids_text.split("\n")]
+# drop the header line
+sandia_patent_id_lines = sandia_patent_ids_text.split("\n")[1:]
+# remove the trailing `,1,` or `,0,` from each line
+sandia_patent_ids = [i[:-3] for i in sandia_patent_id_lines]
 matched = []
 not_matched = []
 for patent_id in sandia_patent_ids:
